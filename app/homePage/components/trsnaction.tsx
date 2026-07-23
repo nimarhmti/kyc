@@ -1,6 +1,6 @@
 import { Suspense } from "react";
 
-const transactions = Array.from({ length: 40 }, (_, i) => ({
+const transactions = Array.from({ length: 2 }, (_, i) => ({
   id: i + 1,
   title: `Transaction ${i + 1}`,
   amount: `$${(Math.random() * 200).toFixed(2)}`,
