@@ -65,8 +65,8 @@ export function BankCard({ data }: BankCardProps) {
             transformStyle: "preserve-3d",
             transform: `rotateX(${tilt.x}deg) rotateY(${tilt.y + (flipped ? 180 : 0)}deg)`,
             transition: flipped
-              ? "transform 0.55s cubic-bezier(0.4, 0.2, 0.2, 1)"
-              : "transform 0.15s ease-out",
+              ? "transform 0.55s cubic-bezier(0.86,0,0.07,1)"
+              : "transform 0.55s cubic-bezier(0.86,0,0.07,1)",
           }}
         >
           {/* FRONT */}
