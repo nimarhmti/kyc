@@ -134,3 +134,10 @@
     @apply font-sans;
   }
 }
+.hero-visual {
+  --hero-width: min(628px, 100%, calc(100vh * 628 / 875));
+
+  width: var(--hero-width);
+  aspect-ratio: 628 / 875;
+  position: relative;
+}

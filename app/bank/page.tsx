@@ -1,6 +1,8 @@
 "use client";
 
 import React, { useState, useCallback, UIEvent } from "react";
+import { BankCard } from "./bankCard";
+import { SAMPLE_CARD } from "../credit/page";
 
 // ===================== Tunable constants =====================
 
@@ -41,16 +43,17 @@ export default function CardScrollBlur() {
           style={{ top: `${CARD_TOP}px` }}
         >
           <div
-            className="rounded-2xl bg-gradient-to-br from-emerald-600 via-teal-700 to-[#0c2b26] shadow-2xl flex items-center justify-center"
+            // className="rounded-2xl bg-gradient-to-br from-emerald-600 via-teal-700 to-[#0c2b26] shadow-2xl flex items-center justify-center"
             style={{
-              width: CARD_WIDTH,
-              height: CARD_HEIGHT,
+              // width: CARD_WIDTH,
+              // height: CARD_HEIGHT,
               transform: `scale(${scale})`,
               transformOrigin: "top center", // shrinks toward the top, so its bottom edge recedes upward
             }}
           >
-            <span className="text-white/40 text-xs">card</span>
+            {/* <span className="text-white/40 text-xs">card</span> */}
           </div>
+          <BankCard data={SAMPLE_CARD} />;
         </div>
 
         {/* ===== The one scroll container. Its content — starting with the blur/fade band — ===== */}

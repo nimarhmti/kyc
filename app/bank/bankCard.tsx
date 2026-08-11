@@ -60,7 +60,7 @@ export function BankCard({ data }: BankCardProps) {
           onMouseMove={handleMouseMove}
           onMouseLeave={handleMouseLeave}
           onClick={() => setFlipped((f) => !f)}
-          className="relative w-[240px] h-[330px] cursor-pointer select-none"
+          className="relative w-[240px] h-[330px] cursor-pointer select-none "
           style={{
             transformStyle: "preserve-3d",
             transform: `rotateX(${tilt.x}deg) rotateY(${tilt.y + (flipped ? 180 : 0)}deg)`,
