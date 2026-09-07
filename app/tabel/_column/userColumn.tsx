@@ -16,10 +16,10 @@ export const userColumns = columnHelper.columns([
     accessorKey: "name",
     header: () => <span className="bg-amber-400">NAme</span>,
 
-    meta: {
-      align: "center",
-      width: "10%",
-    },
+    // meta: {
+    //   align: "center",
+    //   width: "10%",
+    // },
   },
   {
     accessorKey: "email",

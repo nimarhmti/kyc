@@ -18,6 +18,7 @@ import type {
   PaginationState,
   OnChangeFn,
 } from "@tanstack/react-table";
+type DataTableMobileMode = "table" | "stacked";
 type DataTableColumnMeta = {
   align?: "start" | "center" | "end";
   width?: number | string;
@@ -45,7 +46,6 @@ export const features = tableFeatures({
 
 type DataTableProps<TData extends RowData> = {
   data: TData[];
-  //   columns: ColumnDef<TableFeatures, TData, CellData>[];
   columns: ColumnDef<typeof features, TData, CellData>[];
   columnVisibility?: ColumnVisibilityState;
   onColumnVisibilityChange?: (
@@ -60,6 +60,7 @@ type DataTableProps<TData extends RowData> = {
   rowClassName?: string;
   rowEvenClassName?: string;
   rowOddClassName?: string;
+  mobileMode?: DataTableMobileMode;
 };
 
 export function DataTable<TData extends RowData>({
@@ -74,6 +75,7 @@ export function DataTable<TData extends RowData>({
   rowClassName,
   rowEvenClassName,
   rowOddClassName,
+  mobileMode = "table",
 }: DataTableProps<TData>) {
   const table = useTable({
     features,
@@ -96,88 +98,108 @@ export function DataTable<TData extends RowData>({
   };
 
   const rows = table.getRowModel().rows;
+
   return (
     <div className="w-full ">
-      {/* <table className="w-full table-fixed ">
-        <thead>
-          {table.getHeaderGroups().map((headerGroup) => (
-            <tr key={headerGroup.id}>
-              {showRowIndex && <th></th>}
+      {mobileMode === "table" ? (
+        <div className="w-full overflow-x-auto no-scrollbar ">
+          <table className="w-full min-w-100 table-auto!">
+            <thead>
+              {table.getHeaderGroups().map((headerGroup) => (
+                <tr key={headerGroup.id}>
+                  {showRowIndex && <th></th>}
 
-              {headerGroup.headers.map((header) => (
-                <th
-                  key={header.id}
-                  className={getColumnAlignClass(
-                    header.column.columnDef.meta?.align,
-                  )}
-                  style={getColumnStyle(header.column.columnDef.meta)}
-                >
-                  {header.isPlaceholder
-                    ? null
-                    : flexRender(
-                        header.column.columnDef.header,
-                        header.getContext(),
+                  {headerGroup.headers.map((header) => (
+                    <th
+                      key={header.id}
+                      className={getColumnAlignClass(
+                        header.column.columnDef.meta?.align,
                       )}
-                </th>
+                      style={getColumnStyle(header.column.columnDef.meta)}
+                    >
+                      {header.isPlaceholder
+                        ? null
+                        : flexRender(
+                            header.column.columnDef.header,
+                            header.getContext(),
+                          )}
+                    </th>
+                  ))}
+                </tr>
               ))}
-            </tr>
-          ))}
-        </thead>
+            </thead>
 
-        <tbody>
-          {table.getRowModel().rows.map((row, rowIndex) => {
-            const index =
-              (pagination?.pageIndex ?? 0) *
-                (pagination?.pageSize ?? table.getRowModel().rows.length) +
-              rowIndex +
-              1;
+            <tbody>
+              {table.getRowModel().rows.map((row, rowIndex) => {
+                const index =
+                  (pagination?.pageIndex ?? 0) *
+                    (pagination?.pageSize ?? table.getRowModel().rows.length) +
+                  rowIndex +
+                  1;
 
-            return (
-              <tr key={row.id}>
-                {showRowIndex && <td>{index}</td>}
+                return (
+                  <tr key={row.id}>
+                    {showRowIndex && <td>{index}</td>}
 
-                {row.getVisibleCells().map((cell) => (
-                  <td
-                    key={cell.id}
-                    className={cn(
-                      getColumnAlignClass(cell.column.columnDef.meta?.align),
-                      getRowClassName(index),
-                    )}
-                    style={getColumnStyle(cell.column.columnDef.meta)}
-                  >
-                    <table.FlexRender cell={cell} />
-                  </td>
-                ))}
-              </tr>
-            );
-          })}
-        </tbody>
-      </table> */}
-      <div className="flex flex-col gap-3">
-        {rows.map((row) => (
-          <div key={row.id} className="max-w-70 rounded-xl bg-amber-200 p-4">
-            <div className="flex flex-col gap-3">
-              {row.getVisibleCells().map((cell) => (
-                <div
-                  key={cell.id}
-                  className="flex items-center justify-between gap-4"
-                >
-                  <span className="shrink-0 text-sm text-muted-foreground">
-                    {flexRender(
-                      cell.column.columnDef.header,
-                      cell.column.columnDef.,
-                    )}
-                  </span>
+                    {row.getVisibleCells().map((cell) => (
+                      <td
+                        key={cell.id}
+                        className={cn(
+                          "whitespace-nowrap pe-4",
+                          getColumnAlignClass(
+                            cell.column.columnDef.meta?.align,
+                          ),
+                          getRowClassName(index),
+                        )}
+                        style={getColumnStyle(cell.column.columnDef.meta)}
+                      >
+                        <table.FlexRender cell={cell} />
+                      </td>
+                    ))}
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        </div>
+      ) : (
+        <div className="flex flex-col gap-3">
+          {rows.map((row) => (
+            <div key={row.id} className="max-w-70 rounded-xl  p-4">
+              <div className="flex flex-col gap-3">
+                {row.getVisibleCells().map((cell) => {
+                  const header = table
+                    .getHeaderGroups()
+                    .flatMap((headerGroup) => headerGroup.headers)
+                    .find((header) => header.column.id === cell.column.id);
+                  return (
+                    <div
+                      key={cell.id}
+                      className="flex items-center justify-between gap-4"
+                    >
+                      {header && !header.isPlaceholder && (
+                        <span className="shrink-0 text-sm text-muted-foreground">
+                          {flexRender(
+                            header.column.columnDef.header,
+                            header.getContext(),
+                          )}
+                        </span>
+                      )}
 
-                  <span className="min-w-0 text-end text-sm font-medium text-foreground">
-                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                  </span>
-                </div>
-              ))}
+                      <span className="min-w-0 text-end text-sm font-medium text-foreground">
+                        {flexRender(
+                          cell.column.columnDef.cell,
+                          cell.getContext(),
+                        )}
+                      </span>
+                    </div>
+                  );
+                })}
+              </div>
             </div>
-          </div>
-        ))}
-      </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 }

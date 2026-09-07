@@ -42,6 +42,7 @@ export default function FaceRecorder({
 
   // Create the blob URL exactly once per new recording, and clean it up properly
   useEffect(() => {
+    // console.log("hi i'm there !");
     if (!recordedBlob) {
       setRecordedUrl(null);
       return;
@@ -124,6 +125,7 @@ export default function FaceRecorder({
 
     chunksRef.current = [];
     const recorder = new MediaRecorder(stream, {
+      // mimeType: "video/webm;codecs=vp9",
       mimeType: "video/webm;codecs=vp9",
     });
 
